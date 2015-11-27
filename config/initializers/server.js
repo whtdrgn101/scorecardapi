@@ -23,7 +23,7 @@ var start =  function(cb) {
 
   logger.info('[SERVER] Initializing routes');
   require('../../app/routes/index')(app);
-
+  
   app.use(express.static(path.join(__dirname, 'public')));
 
   // Error handler

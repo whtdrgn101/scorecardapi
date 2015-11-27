@@ -1,4 +1,7 @@
 // app/routes/scorecard.js
+var nconf = require('nconf');
+var MongoClient = require('mongodb').MongoClient;
+var logger = require('winston');
 
 module.exports = function(router) {
   'use strict';
@@ -19,8 +22,16 @@ module.exports = function(router) {
 
   router.route('/')
   .get(function(req, res, next) {
-    // Logic for GET /users routes
+    
+    MongoClient.connect(nconf.get('database'), function(err, db) {
+      db.collection(nconf.get('collection')).find().toArray(function(err, result) {
+        if (err) {
+          throw err;
+        }
+        res.json(result);
+      });
+    });
   }).post(function(req, res, next) {
-    // Create new user
+    // Create new userdac47e8d-bd87-4e8f-906b-7150a26ae5f9
   });
 };

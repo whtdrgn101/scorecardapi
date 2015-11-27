@@ -1,10 +1,12 @@
 // config/initializers/db.js
+var logger = require('winston');
+var nconf = require('nconf');
+var MongoClient = require('mongodb').MongoClient;
 
 module.exports = function(cb) {
   'use strict';
-  // Initialize the component here then call the callback
-  // More logic
-  //
-  // Return the call back
+  logger.info('[DB] Configuring db to connect to:', nconf.get('database'));
+  
   cb();
+    
 };
