@@ -2,7 +2,6 @@
 var nconf = require('nconf');
 var logger = require('winston');
 var scorecard = require('../models/scorecard');
-var mongoose = require('mongoose');
 
 module.exports = function(router) {
   'use strict';
@@ -33,15 +32,13 @@ module.exports = function(router) {
 
   router.route('/')
   .get(function(req, res, next) {
-    
-    scorecard.find(function(err, scorecards) {
-      if (err) {
-        res.json({message: err});
-      } else {
-        res.json(scorecards);  
-      }
+
+    scorecard.find({}, function(err, scorecards) {
+      if (err) { throw err; }
+
+      res.send(scorecards);
     });
-    
+
   }).post(function(req, res, next) {
      
     var card = new scorecard({user:{email:"whtdrgn101@gmail.com"}});

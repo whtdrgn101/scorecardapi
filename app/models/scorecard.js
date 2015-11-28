@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 // Mongoose Schema definition
 var Schema = mongoose.Schema;
 
-var ScorecardSchema = new Schema({
+var scorecardSchema = new Schema({
   user: {
     email: String,
     userId: String,
@@ -12,7 +12,7 @@ var ScorecardSchema = new Schema({
     location: String
   },
   rounds: [{
-    recordedDate: Date,
+    recordedDate: {type: Date, default: Date.now},
     bowName: String,
     score: Number,
     notes: String,
@@ -33,4 +33,4 @@ var ScorecardSchema = new Schema({
   }]
 });
 
-module.exports = mongoose.model('myshootinglog', ScorecardSchema);
+module.exports = mongoose.model('Scorecard', scorecardSchema);
