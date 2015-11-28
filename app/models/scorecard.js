@@ -33,5 +33,4 @@ var ScorecardSchema = new Schema({
   }]
 });
 
-var Scorecard = mongoose.model('myshootinglog', ScorecardSchema);
-module.exports = Scorecard;
+module.exports = mongoose.model('myshootinglog', ScorecardSchema);

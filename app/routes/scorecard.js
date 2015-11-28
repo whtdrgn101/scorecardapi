@@ -34,14 +34,12 @@ module.exports = function(router) {
   router.route('/')
   .get(function(req, res, next) {
     
-    //logger.info(scorecard);
-    
-    scorecard.find({}).exec(function(err, scorecards) {
-      if (err) throw err;
-
-      // object of all the users
-      logger.info(scorecards);
-      res.json(scorecards);
+    scorecard.find(function(err, scorecards) {
+      if (err) {
+        res.json({message: err});
+      } else {
+        res.json(scorecards);  
+      }
     });
     
   }).post(function(req, res, next) {
