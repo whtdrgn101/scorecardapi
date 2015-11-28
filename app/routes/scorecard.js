@@ -9,25 +9,52 @@ module.exports = function(router) {
   // This will handle the url calls for /scorecard/:user_id
   router.route('/:userId')
   .get(function(req, res, next) {
-    
-    //Get the specific scorecard
-    // MongoClient.connect(nconf.get('database'), function(err, db) {
-    //   db.collection(nconf.get('collection')).find().toArray(function(err, result) {
-    //     if (err) {
-    //       throw err;
-    //     }
-    //     res.json(result);
-    //   });
-    // });
+    if (req.params.userId) {
+      scorecard.findOne({'user.userId': req.params.userId}, function (err, scorecards) {
+        if (err) {
+          throw err;
+        }
+        res.send(scorecards);
+      });
+    } else {
+      res.sendStatus(404);
+    }
   }) 
   .put(function(req, res, next) {
-    // Update scorecard
+    if (req.params.userId) {
+      scorecard.findOne({'user.userId': req.params.userId}, function (err, scorecards) {
+        if (err) {
+          throw err;
+        }
+        //TODO: Replace record
+      });
+    } else {
+      res.sendStatus(404);
+    }
   })
   .patch(function(req, res,next) {
-    // Patch
+    if (req.params.userId) {
+      scorecard.findOne({'user.userId': req.params.userId}, function (err, scorecards) {
+        if (err) {
+          throw err;
+        }
+        //TODO: Replace record
+      });
+    } else {
+      res.sendStatus(404);
+    }
   })
   .delete(function(req, res, next) {
-    // Delete record
+    if (req.params.userId) {
+      scorecard.findOne({'user.userId': req.params.userId}).remove(function (err, scorecards) {
+        if (err) {
+          throw err;
+        }
+        res.sendStatus(202);
+      });
+    } else {
+      res.sendStatus(404);
+    }
   });
 
   router.route('/')
