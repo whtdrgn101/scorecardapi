@@ -10,11 +10,16 @@ module.exports = function(router) {
   router.route('/:userId')
   .get(function(req, res, next) {
     if (req.params.userId) {
-      scorecard.findOne({'user.userId': req.params.userId}, function (err, scorecards) {
+      scorecard.findOne({'user.userId': req.params.userId}, function (err, card) {
         if (err) {
           throw err;
         }
-        res.send(scorecards);
+        if(card) {
+          res.send(card);
+        } else {
+          res.sendStatus(404);
+        }
+
       });
     } else {
       res.sendStatus(404);
@@ -22,11 +27,20 @@ module.exports = function(router) {
   }) 
   .put(function(req, res, next) {
     if (req.params.userId) {
-      scorecard.findOne({'user.userId': req.params.userId}, function (err, scorecards) {
+      scorecard.findOne({'user.userId': req.params.userId}, function (err, card) {
         if (err) {
           throw err;
         }
-        //TODO: Replace record
+
+        if(card) {
+
+          console.log(req.body);
+          card.save();
+          res.sendStatus(202);
+        } else {
+          res.sendStatus(404);
+        }
+
       });
     } else {
       res.sendStatus(404);

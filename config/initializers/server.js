@@ -18,7 +18,6 @@ var start =  function(cb) {
   app = express();
 
   app.use(morgan('common'));
-  app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json({type: '*/*'}));
 
   logger.info('[SERVER] Initializing routes');
