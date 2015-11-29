@@ -33,10 +33,13 @@ module.exports = function(router) {
         }
 
         if(card) {
-
-          console.log(req.body);
-          card.save();
-          res.sendStatus(202);
+          card.update(req.body, function(err, c){
+            if (err) {
+              throw err;
+            }
+            card.save();
+            res.sendStatus(202);
+          });
         } else {
           res.sendStatus(404);
         }
