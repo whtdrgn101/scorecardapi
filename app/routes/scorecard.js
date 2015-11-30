@@ -111,7 +111,16 @@ module.exports = function(router) {
 
   }).post(function(req, res, next) {
      
-    res.sendStatus(201);
+    scorecard.findOne({'user._id': req.params.userId}).exec(function (err, results) {
+      if (results) { 
+        results.bows.push(req.body);
+        results.save();
+        res.sendStatus(201);
+      } else {
+        res.sendStatus(404);
+      }
+      
+    });
    
   });
   
@@ -157,16 +166,7 @@ module.exports = function(router) {
     }
   })
   .patch(function(req, res,next) {
-    if (req.params.userId) {
-      scorecard.findOne({'user.userId': req.params.userId}, function (err, scorecards) {
-        if (err) {
-          throw err;
-        }
-        //TODO: Replace record
-      });
-    } else {
-      res.sendStatus(404);
-    }
+   res.sendStatus(405);
   })
   .delete(function(req, res, next) {
     if (req.params.userId) {
@@ -199,7 +199,16 @@ module.exports = function(router) {
 
   }).post(function(req, res, next) {
      
-    res.sendStatus(201);
+    scorecard.findOne({'user._id': req.params.userId}).exec(function (err, results) {
+      if (results) { 
+        results.rounds.push(req.body);
+        results.save();
+        res.sendStatus(201);
+      } else {
+        res.sendStatus(404);
+      }
+      
+    });
    
   });
   
@@ -246,16 +255,7 @@ module.exports = function(router) {
     }
   })
   .patch(function(req, res,next) {
-    if (req.params.userId) {
-      scorecard.findOne({'user._id': req.params.userId}, function (err, scorecards) {
-        if (err) {
-          throw err;
-        }
-        //TODO: Replace record
-      });
-    } else {
-      res.sendStatus(404);
-    }
+    res.sendStatus(405);
   })
   .delete(function(req, res, next) {
     if (req.params.userId) {
