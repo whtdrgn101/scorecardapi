@@ -26,14 +26,16 @@ var roundSchema = new Schema({
     ends: [endsSchema]
 });
 
+var userSchema = new Schema({
+  email: String,
+  serId: String,
+  image: String,
+  name: String,
+  location: String
+});
+
 var scorecardSchema = new Schema({
-  user: {
-    email: String,
-    userId: String,
-    image: String,
-    name: String,
-    location: String
-  },
+  user: userSchema,
   rounds: [roundSchema],
   bows: [bowSchema]
 });

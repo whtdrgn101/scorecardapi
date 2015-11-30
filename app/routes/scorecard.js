@@ -2,6 +2,7 @@
 var nconf = require('nconf');
 var logger = require('winston');
 var scorecard = require('../models/scorecard');
+var _ = require('underscore');
 
 module.exports = function(router) {
   'use strict';
@@ -10,7 +11,7 @@ module.exports = function(router) {
   router.route('/:userId')
   .get(function(req, res, next) {
     if (req.params.userId) {
-      scorecard.findOne({'user.userId': req.params.userId}, function (err, card) {
+      scorecard.findOne({'user._id': req.params.userId}, function (err, card) {
         if (err) {
           throw err;
         }
@@ -27,7 +28,7 @@ module.exports = function(router) {
   }) 
   .put(function(req, res, next) {
     if (req.params.userId) {
-      scorecard.findOne({'user.userId': req.params.userId}, function (err, card) {
+      scorecard.findOne({'user._id': req.params.userId}, function (err, card) {
         if (err) {
           throw err;
         }
@@ -51,7 +52,7 @@ module.exports = function(router) {
   })
   .patch(function(req, res,next) {
     if (req.params.userId) {
-      scorecard.findOne({'user.userId': req.params.userId}, function (err, scorecards) {
+      scorecard.findOne({'user._id': req.params.userId}, function (err, scorecards) {
         if (err) {
           throw err;
         }
@@ -63,12 +64,17 @@ module.exports = function(router) {
   })
   .delete(function(req, res, next) {
     if (req.params.userId) {
-      scorecard.findOne({'user.userId': req.params.userId}).remove(function (err, scorecards) {
-        if (err) {
-          throw err;
-        }
-        res.sendStatus(202);
-      });
+      try {
+        scorecard.findOne({'user._id': req.params.userId}).remove(function (err, card) {
+          
+          if(!err && card.result.n >= 1)
+            res.sendStatus(202);
+          else
+            res.sendStatus(404);
+        });
+      } catch(err) {
+        res.sendStatus(500);
+      }
     } else {
       res.sendStatus(404);
     }
@@ -91,13 +97,16 @@ module.exports = function(router) {
   });
   
   // [/scorecard/:userId/bows] - Returns list of bows for provided users
-  router.route('/:userid/bows')
+  router.route('/:userId/bows')
   .get(function(req, res, next) {
-
-    scorecard.findOne({'user.userId': req.params.userId}).select('bows').exec(function (err, bows) {
-      if (err) { throw err; }
-
-      res.send(bows);
+    
+    scorecard.findOne({'user._id': req.params.userId}).select('bows').exec(function (err, bows) {
+      if (err) { 
+        res.sendStatus(404) 
+      } else {
+        res.send(bows.bows);  
+      }
+      
     });
 
   }).post(function(req, res, next) {
@@ -107,15 +116,13 @@ module.exports = function(router) {
   });
   
   // [/scorecard/:userId/bows/:bowNum] - Work with a specific bow
-  router.route('/:userId/bows/:bowNum')
+  router.route('/:userId/bows/:bowId')
   .get(function(req, res, next) {
     if (req.params.userId) {
-      scorecard.findOne({'user.userId': req.params.userId, 'bows.bowNum': req.params.bowNum}).select('bows').exec(function (err, bow) {
-        if (err) {
-          throw err;
-        }
+      scorecard.findOne({'user._id': req.params.userId, 'bows._id': req.params.bowId}).select('bows').exec(function (err, bow) {
         if(bow) {
-          res.send(bow);
+          var found = _.find(bow.bows, function(f) {return f._id == req.params.bowId});
+          res.send(found);
         } else {
           res.sendStatus(404);
         }
@@ -163,11 +170,15 @@ module.exports = function(router) {
   })
   .delete(function(req, res, next) {
     if (req.params.userId) {
-      scorecard.findOne({'user.userId': req.params.userId}).remove(function (err, scorecards) {
-        if (err) {
-          throw err;
+      scorecard.findOne({'user._id': req.params.userId, 'bows._id': req.params.bowId}).exec(function (err, results) {
+        if (results) {
+          var bow = results.bows.id(req.params.bowId).remove();
+          results.save();
+          res.sendStatus(202);  
+        } else {
+          res.sendStatus(404);
         }
-        res.sendStatus(202);
+        
       });
     } else {
       res.sendStatus(404);
@@ -175,13 +186,15 @@ module.exports = function(router) {
   });
   
   // [/scorecard/:userId/rounds] - Returns list of rounds for provided users
-  router.route('/:userid/rounds')
+  router.route('/:userId/rounds')
   .get(function(req, res, next) {
 
-    scorecard.findOne({'user.userId': req.params.userId}).select('rounds').exec(function (err, rounds) {
-      if (err) { throw err; }
-
-      res.send(rounds);
+    scorecard.findOne({'user._id': req.params.userId}).select('rounds').exec(function (err, rounds) {
+      if (err) { 
+        res.sendStatus(404) 
+      } else {
+        res.send(rounds.rounds);  
+      }
     });
 
   }).post(function(req, res, next) {
@@ -191,15 +204,14 @@ module.exports = function(router) {
   });
   
   // [/scorecard/:userId/rounds/:roundNum] - Work with a specific round
-  router.route('/:userId/bows/:bowNum')
+  router.route('/:userId/rounds/:roundId')
   .get(function(req, res, next) {
     if (req.params.userId) {
-      scorecard.findOne({'user.userId': req.params.userId, 'rounds.roundNum': req.params.bowNum}).select('rounds').exec(function (err, round) {
-        if (err) {
-          throw err;
-        }
+      scorecard.findOne({'user._id': req.params.userId, 'rounds._id': req.params.roundId}).select('rounds').exec(function (err, round) {
+        
         if(round) {
-          res.send(round);
+          var found = _.find(round.rounds, function(f) {return f._id == req.params.roundId});
+          res.send(found);
         } else {
           res.sendStatus(404);
         }
@@ -211,7 +223,7 @@ module.exports = function(router) {
   }) 
   .put(function(req, res, next) {
     if (req.params.userId) {
-      scorecard.findOne({'user.userId': req.params.userId}, function (err, card) {
+      scorecard.findOne({'user._id': req.params.userId}, function (err, card) {
         if (err) {
           throw err;
         }
@@ -235,7 +247,7 @@ module.exports = function(router) {
   })
   .patch(function(req, res,next) {
     if (req.params.userId) {
-      scorecard.findOne({'user.userId': req.params.userId}, function (err, scorecards) {
+      scorecard.findOne({'user._id': req.params.userId}, function (err, scorecards) {
         if (err) {
           throw err;
         }
@@ -247,11 +259,14 @@ module.exports = function(router) {
   })
   .delete(function(req, res, next) {
     if (req.params.userId) {
-      scorecard.findOne({'user.userId': req.params.userId}).remove(function (err, scorecards) {
-        if (err) {
-          throw err;
+      scorecard.findOne({'user._id': req.params.userId}).exec(function (err, results) {
+         if (results) {
+          var round = results.rounds.id(req.params.roundId).remove();
+          results.save();
+          res.sendStatus(202);  
+        } else {
+          res.sendStatus(404);
         }
-        res.sendStatus(202);
       });
     } else {
       res.sendStatus(404);
