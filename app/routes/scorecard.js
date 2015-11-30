@@ -247,7 +247,7 @@ module.exports = function(router) {
           found.bowName = req.body.bowName;
           found.score = req.body.score;
           found.notes = req.body.notes;
-          found.location = req.body.locations;
+          found.location = req.body.location;
           found.ends = req.body.ends;
           
           results.save();
