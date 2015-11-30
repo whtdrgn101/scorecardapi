@@ -143,19 +143,23 @@ module.exports = function(router) {
   }) 
   .put(function(req, res, next) {
     if (req.params.userId) {
-      scorecard.findOne({'user.userId': req.params.userId}, function (err, card) {
-        if (err) {
-          throw err;
-        }
-
-        if(card) {
-          card.update(req.body, function(err, c){
-            if (err) {
-              throw err;
-            }
-            card.save();
-            res.sendStatus(202);
-          });
+      scorecard.findOne({'user._id': req.params.userId}, function (err, results) {
+        if(results) {
+          if (err) {
+            throw err;
+          }
+          
+          var found = results.bows.id(req.params.bowId);
+          found.name = req.body.name;
+          found.make = req.body.make;
+          found.model = req.body.model;
+          found.type = req.body.type;
+          found.poundage = req.body.poundage;
+          found.braceHeight = req.body.braceHeight;
+          found.amoLength = req.body.amoLength;
+          
+          results.save();
+          res.sendStatus(202);
         } else {
           res.sendStatus(404);
         }
@@ -232,19 +236,22 @@ module.exports = function(router) {
   }) 
   .put(function(req, res, next) {
     if (req.params.userId) {
-      scorecard.findOne({'user._id': req.params.userId}, function (err, card) {
-        if (err) {
-          throw err;
-        }
-
-        if(card) {
-          card.update(req.body, function(err, c){
-            if (err) {
-              throw err;
-            }
-            card.save();
-            res.sendStatus(202);
-          });
+      scorecard.findOne({'user._id': req.params.userId}, function (err, results) {
+        if(results) {
+          if (err) {
+            throw err;
+          }
+          
+          var found = results.rounds.id(req.params.roundId);
+          found.recordedDate = req.body.recordedDate;
+          found.bowName = req.body.bowName;
+          found.score = req.body.score;
+          found.notes = req.body.notes;
+          found.location = req.body.locations;
+          found.ends = req.body.ends;
+          
+          results.save();
+          res.sendStatus(202);
         } else {
           res.sendStatus(404);
         }
