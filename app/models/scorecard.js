@@ -2,6 +2,29 @@ var mongoose = require('mongoose');
 
 // Mongoose Schema definition
 var Schema = mongoose.Schema;
+var bowSchema = new Schema({
+    name: String,
+    make: String,
+    model: String,
+    type: String,
+    poundage: String,
+    braceHeight: String,
+    amoLength: String
+});
+
+var endsSchema = new Schema({
+  num: Number,
+  score: Number
+});
+
+var roundSchema = new Schema({
+    recordedDate: {type: Date, default: Date.now},
+    bowName: String,
+    score: Number,
+    notes: String,
+    location: String,
+    ends: [endsSchema]
+});
 
 var scorecardSchema = new Schema({
   user: {
@@ -11,26 +34,8 @@ var scorecardSchema = new Schema({
     name: String,
     location: String
   },
-  rounds: [{
-    recordedDate: {type: Date, default: Date.now},
-    bowName: String,
-    score: Number,
-    notes: String,
-    location: String,
-    ends: [{
-      num: Number,
-      score: Number
-    }]
-  }],
-  bows: [{
-    name: String,
-    make: String,
-    model: String,
-    type: String,
-    poundage: String,
-    braceHeight: String,
-    amoLength: String
-  }]
+  rounds: [roundSchema],
+  bows: [bowSchema]
 });
 
 module.exports = mongoose.model('Scorecard', scorecardSchema);
