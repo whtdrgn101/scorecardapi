@@ -15,6 +15,13 @@ module.exports = function(app) {
     // Initialize the route to add its functionality to router
     require('./' + routeName)(router);
     
+    //Setup for CORS
+    app.use(function(req, res, next) {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      next();
+    });
+  
     // Add router to the speficied route name in the app
     app.use('/' + changeCase.paramCase(routeName), router);
   }); 

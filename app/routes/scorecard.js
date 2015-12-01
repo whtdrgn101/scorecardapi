@@ -92,7 +92,8 @@ module.exports = function(router) {
     });
 
   }).post(function(req, res, next) {
-
+    var card = new scorecard(req.body);
+    card.save();
     res.sendStatus(201);
 
   });

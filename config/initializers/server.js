@@ -23,17 +23,8 @@ var start =  function(cb) {
   logger.info('[SERVER] Initializing routes');
   require('../../app/routes/index')(app);
   
-  var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://www.myshootinglog.com:9000');
-    res.header('Access-Control-Allow-Origin', 'http://www.myshootinglog.com');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-
-    next();
-  }
-
   app.use(express.static(path.join(__dirname, 'public')));
-  app.use(allowCrossDomain);
+  
   
   // Error handler
   app.use(function(err, req, res, next) {
@@ -44,7 +35,14 @@ var start =  function(cb) {
     });
     next(err);
   });
-
+  
+  //Setup for CORS
+  app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+  
   app.listen(config.get('NODE_PORT'));
   logger.info('[SERVER] Listening on port ' + config.get('NODE_PORT'));
   
