@@ -1,7 +1,15 @@
+/**
+ * The main object in this schema is scorecard.  All other items are embedded
+ * documents.  This is done because in mongoose, the _id values are update when
+ * you push new versions of these embedded documents but not the parent ID of
+ * the scorecard.  Not sure why this is but it is...  I'll sort that out
+ * once I get the main app working...
+ */
 var mongoose = require('mongoose');
 
 // Mongoose Schema definition
 var Schema = mongoose.Schema;
+
 var bowSchema = new Schema({
     name: String,
     make: String,
