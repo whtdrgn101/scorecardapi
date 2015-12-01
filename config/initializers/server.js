@@ -23,12 +23,22 @@ var start =  function(cb) {
   logger.info('[SERVER] Initializing routes');
   require('../../app/routes/index')(app);
   
-  app.use(express.static(path.join(__dirname, 'public')));
+  var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', 'http://www.myshootinglog.com:9000');
+    res.header('Access-Control-Allow-Origin', 'http://www.myshootinglog.com');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
 
+    next();
+  }
+
+  app.use(express.static(path.join(__dirname, 'public')));
+  app.use(allowCrossDomain);
+  
   // Error handler
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    res.json({
+   res.json({
       message: err.message,
       error: (app.get('env') === 'dev' ? err : {})
     });

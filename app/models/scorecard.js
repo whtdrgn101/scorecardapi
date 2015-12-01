@@ -36,7 +36,7 @@ var roundSchema = new Schema({
 
 var userSchema = new Schema({
   email: String,
-  serId: String,
+  accountId: String,
   image: String,
   name: String,
   location: String
