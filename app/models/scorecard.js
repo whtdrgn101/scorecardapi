@@ -21,7 +21,7 @@ var bowSchema = new Schema({
 });
 
 var endsSchema = new Schema({
-  num: Number,
+  number: Number,
   score: Number
 });
 
