@@ -8,6 +8,7 @@ module.exports = function(cb) {
   logger.info('[DB] Configuring db to connect to:', nconf.get('database'));
   logger.info('[DB] Configuring db to use collection:', nconf.get('collection'));
   mongoose.connect( nconf.get('database'));
+  mongoose.Promise = require('bluebird');
   cb();
     
 };

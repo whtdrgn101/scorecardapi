@@ -3,6 +3,7 @@ var nconf = require('nconf');
 var logger = require('winston');
 var user = require('../models/user');
 var _ = require('underscore');
+var security = require('../shared/security');
 
 module.exports = function(router) {
   'use strict';
@@ -54,8 +55,10 @@ module.exports = function(router) {
   // [/user] route
   router.route('/')
       .post(function(req, res, next) {
-        var usr = new user(req.body);
-        usr.save();
-        res.status(201).send(usr);
+        security.user.create(req.body).then(results=>{
+            res.status(201).send(results);
+        }).catch(error => {
+            res.status(error.code).send(error.message);
+        });
       });
 };
