@@ -36,12 +36,6 @@ var start =  function(cb) {
     next(err);
   });
   
-  //Setup for CORS
-  app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
   
   app.listen(config.get('NODE_PORT'));
   logger.info('[SERVER] Listening on port ' + config.get('NODE_PORT'));

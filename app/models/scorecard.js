@@ -27,6 +27,7 @@ var endsSchema = new Schema({
 
 var roundSchema = new Schema({
     recordedDate: {type: Date, default: Date.now},
+    roundType: String,
     bowName: String,
     score: Number,
     notes: String,
