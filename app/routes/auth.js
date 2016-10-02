@@ -37,7 +37,7 @@ module.exports = function(router) {
                         } else {
                             var cert = fs.readFileSync(nconf.get('authKeyFile'));
                             var token = jwt.sign(usr, cert, {
-                                expiresIn: 17280
+                                expiresIn: 86400
                             });
                             res.status(200).send({
                                 success: true,

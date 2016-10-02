@@ -13,7 +13,7 @@ module.exports = {
             return new P( function(resolve, reject) {
                 roles = roles || [];
                 var cert = fs.readFileSync(nconf.get('authKeyFile'));
-                var token = req.header('x-lhs-access-token');
+                var token = req.header('X-Authorization');
 
                 if (token) {
                     jwt.verify(token, cert, function(err, decoded) {
@@ -62,7 +62,7 @@ module.exports = {
                 roles = roles || [];
 
                 var cert = fs.readFileSync(nconf.get('authKeyFile'));
-                var token = req.header('x-lhs-access-token');
+                var token = req.header('X-Authorization');
 
                 if (token) {
                     jwt.verify(token, cert, function(err, decoded) {
