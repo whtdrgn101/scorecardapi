@@ -130,7 +130,7 @@ module.exports = function(router) {
   router.route('/:userId/bows/:bowId')
   .get(function(req, res, next) {
 
-    scorecard.findOne({'user.accountId': req.params.userId, 'bows._id': req.params.bowId}).select('bows').exec(function (err, bow) {
+    scorecard.findOne({'user.accountId': req.params.userId, 'bows._id': req.params.bowId}).select('bows').sort('bows.name desc').exec(function (err, bow) {
       if(bow) {
         var found = _.find(bow.bows, function(f) {return f._id == req.params.bowId});
         res.send(found);
