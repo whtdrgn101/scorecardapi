@@ -223,7 +223,12 @@ module.exports = {
         }
     },
     bow: {
-        hasAccess: function(token) {
+        hasAccess: function(token, bowId) {
+            return true;
+        }
+    },
+    round: {
+        hasAccess: function(token, roundId) {
             return true;
         }
     }
