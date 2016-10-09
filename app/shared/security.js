@@ -221,6 +221,11 @@ module.exports = {
 
             return token._doc._id === userId;
         }
+    },
+    bow: {
+        hasAccess: function(token) {
+            return true;
+        }
     }
 
 };

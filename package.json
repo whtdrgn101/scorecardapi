@@ -39,6 +39,7 @@
   "dependencies": {
     "bcrypt": "^0.8.7",
     "bluebird": "^3.4.6",
-    "jsonwebtoken": "^7.1.9"
+    "jsonwebtoken": "^7.1.9",
+    "mysql": "^2.11.1"
   }
 }
