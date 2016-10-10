@@ -46,7 +46,18 @@ module.exports = {
     },
     getMemberBows: function(member_id) {
         return new P(function(resolve, reject){
-            connection.query('SELECT * FROM bow WHERE member_id=?', member_id, function(err, rows) {
+            connection.query('SELECT b.*, bt.name bow_type_name FROM bow b INNER JOIN bow_type bt ON (b.bow_type = bt.id) WHERE member_id=? ORDER BY b.name ASC', member_id, function(err, rows) {
+                if(err) {
+                    reject(err);
+                    return;
+                }
+                resolve(rows);
+            });    
+        });
+    },
+    getTypes: function() {
+        return new P(function(resolve, reject){
+            connection.query('SELECT * FROM bow_type', function(err, rows) {
                 if(err) {
                     reject(err);
                     return;

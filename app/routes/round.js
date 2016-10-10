@@ -46,7 +46,6 @@ module.exports = function(router) {
     router.route('/')
         .post(function(req, res, next) {
             var r = req.body;
-            r.member_id = 1;
             
             round.createRound(r).then(b => {
                 res.status(201).send(b);

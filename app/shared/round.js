@@ -121,7 +121,18 @@ module.exports = {
     },
     getMemberRounds: function(member_id) {
         return new P(function(resolve, reject){
-            connection.query('SELECT * FROM round WHERE member_id=?', member_id, function(err, rows) {
+            connection.query('SELECT r.* FROM round r INNER JOIN round_type rt ON (r.round_type = r.id) WHERE member_id=?', member_id, function(err, rows) {
+                if(err) {
+                    reject(err);
+                    return;
+                }
+                resolve(rows);
+            });    
+        });
+    },
+    getTypes: function() {
+        return new P(function(resolve, reject){
+            connection.query('SELECT * FROM round_type', function(err, rows) {
                 if(err) {
                     reject(err);
                     return;

@@ -12,7 +12,7 @@ module.exports = function(router) {
     // This will handle the url calls for /bow/:bow_id
     router.route('/:bowId')
         .get(function(req, res, next) {
-            if(security.bow.hasAccess(req.token)) {
+            if(security.bow.hasAccess(req.token, req.params.bowId)) {
                 bow.getBow(req.params.bowId).then(b => {
                     res.status(200).send(b);
                 }).catch(error => {
@@ -21,7 +21,7 @@ module.exports = function(router) {
             }
         })
         .put(function(req, res, next) {
-            if(security.bow.hasAccess(req.token)) {
+            if(security.bow.hasAccess(req.token, req.params.bowId)) {
                 var b = req.body;
                 b.id = req.params.bowId;
                 bow.updateBow(b).then(b => {
@@ -33,7 +33,7 @@ module.exports = function(router) {
         
         })
         .delete(function(req, res, next) {
-            if(security.bow.hasAccess(req.token)) {
+            if(security.bow.hasAccess(req.token, req.params.bowId)) {
                 bow.deleteBow(req.params.bowId).then(b => {
                     res.status(200).send({success:true});
                 }).catch(error => {
@@ -45,15 +45,11 @@ module.exports = function(router) {
     // [/bow] route
     router.route('/')
         .post(function(req, res, next) {
-            if(security.bow.hasAccess(req.token)) {
-                var b = req.body;
-                b.member_id = 1;
-                
-                bow.createBow(b).then(b => {
-                    res.status(201).send(b);
-                }).catch(error => {
-                    res.status(400).send(error);
-                });        
-            }
+            var b = req.body;
+            bow.createBow(b).then(b => {
+                res.status(201).send(b);
+            }).catch(error => {
+                res.status(400).send(error);
+            });        
         });
 };
