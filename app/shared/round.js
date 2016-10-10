@@ -131,7 +131,7 @@ module.exports = {
             INNER JOIN round_type rt ON (r.round_type = rt.id) 
             INNER JOIN bow b ON (r.bow_id = b.id) 
             WHERE r.member_id=? 
-            ORDER BY round_date ASC`, member_id, function(err, rows) {
+            ORDER BY round_date DESC`, member_id, function(err, rows) {
                 if(err) {
                     reject(err);
                     return;
