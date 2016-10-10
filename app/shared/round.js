@@ -121,7 +121,17 @@ module.exports = {
     },
     getMemberRounds: function(member_id) {
         return new P(function(resolve, reject){
-            connection.query('SELECT r.* FROM round r INNER JOIN round_type rt ON (r.round_type = r.id) WHERE member_id=?', member_id, function(err, rows) {
+            console.log(member_id);
+            connection.query(
+            `SELECT 
+                r.*
+                , rt.name round_type_name 
+                , b.name bow_name
+            FROM round r 
+            INNER JOIN round_type rt ON (r.round_type = rt.id) 
+            INNER JOIN bow b ON (r.bow_id = b.id) 
+            WHERE r.member_id=? 
+            ORDER BY round_date ASC`, member_id, function(err, rows) {
                 if(err) {
                     reject(err);
                     return;
