@@ -136,7 +136,10 @@ module.exports = {
                     reject(err);
                     return;
                 }
-                resolve(rows);
+                if(rows.length > 0)
+                    resolve(rows[0]);
+                else
+                    resolve({});
             });    
         });
     },
