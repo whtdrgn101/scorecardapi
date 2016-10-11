@@ -117,18 +117,21 @@ module.exports = {
         let query = 
         `SELECT 
             r.*
+            ,b.name bow_name
+            ,rt.name round_type_name
             , MAX(end_score) highest_end
             , MIN(end_score) lowest_end
             , AVG(end_score) average_end
             , AVG(end_score/arrow_count) average_point_per_arrow 
             FROM round r 
             INNER JOIN end e ON (r.id = e.round_id) 
-            WHERE r.member_id = ?
-            GROUP BY r.member_id
-            HAVING r.round_date = MAX(r.round_date)
-            LIMIT 1`;
+            INNER JOIN bow b ON (r.bow_id = b.id) 
+            INNER JOIN round_type rt ON (r.round_type = rt.id) 
+            WHERE r.member_id = ? 
+            AND r.id  = (select r2.id from round r2 where r2.member_id = ? order by r2.round_date DESC LIMIT 1) 
+            GROUP BY r.member_id`;
         return new P(function(resolve, reject){
-            connection.query(query, id, function(err, rows) {
+            connection.query(query, [id,id], function(err, rows) {
                 if(err) {
                     reject(err);
                     return;
