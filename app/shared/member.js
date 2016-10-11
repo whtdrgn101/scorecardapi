@@ -24,7 +24,7 @@ module.exports = {
     },
     getMemberByEmail: function(email) {
         return new P(function(resolve, reject){
-            connection.query('SELECT * FROM member WHERE email=?', email, function(err, rows) {
+            connection.query('SELECT id, email, active, password, name, created_date, location FROM member WHERE email=?', email, function(err, rows) {
                 if(err) {
                     reject(err);
                     return;
@@ -46,7 +46,7 @@ module.exports = {
     },
     getMember: function(id) {
         return new P(function(resolve, reject){
-            connection.query('SELECT * FROM member WHERE id=?', id, function(err, rows) {
+            connection.query('SELECT id, email, active, password, name, created_date, location FROM member WHERE id=?', id, function(err, rows) {
                 if(err) {
                     reject(err);
                     return;
