@@ -42,7 +42,8 @@ module.exports = function(router) {
                             res.status(200).send({
                                 success: true,
                                 token: token,
-                                userId: user.id
+                                userId: user.id,
+                                email: user.email
                             });
                         }
                     });

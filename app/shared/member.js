@@ -58,7 +58,9 @@ module.exports = {
     getLifetimeStats: function(id) {
         let query = 
         `SELECT 
-            COUNT(DISTINCT r.id) total_rounds
+            b.name bow_name
+            ,rt.name round_type_name
+            ,COUNT(DISTINCT r.id) total_rounds
             , MAX(total_score) highest_round
             , MIN(total_score) lowest_round
             , AVG(total_score) average_round
@@ -68,8 +70,10 @@ module.exports = {
             , AVG(end_score/arrow_count) average_point_per_arrow 
             FROM round r 
             INNER JOIN end e ON (r.id = e.round_id) 
+            INNER JOIN bow b ON (r.bow_id = b.id) 
+            INNER JOIN round_type rt ON (r.round_type = rt.id) 
             WHERE r.member_id = ?
-            GROUP BY r.member_id`;
+            GROUP BY r.member_id, r.round_type, r.bow_id`;
         return new P(function(resolve, reject){
             console.log(query);
             console.log(id);
@@ -79,7 +83,7 @@ module.exports = {
                     return;
                 }
                 if(rows.length > 0)
-                    resolve(rows[0]);
+                    resolve(rows);
                 else
                     resolve({});
             });    
@@ -88,7 +92,9 @@ module.exports = {
     getLast30DayStats: function(id) {
         let query = 
         `SELECT 
-            COUNT(DISTINCT r.id) total_rounds
+            b.name bow_name
+            ,rt.name round_type_name
+            ,COUNT(DISTINCT r.id) total_rounds
             , MAX(total_score) highest_round
             , MIN(total_score) lowest_round
             , AVG(total_score) average_round
@@ -98,8 +104,10 @@ module.exports = {
             , AVG(end_score/arrow_count) average_point_per_arrow 
             FROM round r 
             INNER JOIN end e ON (r.id = e.round_id) 
+            INNER JOIN bow b ON (r.bow_id = b.id) 
+            INNER JOIN round_type rt ON (r.round_type = rt.id) 
             WHERE r.member_id = ? AND r.round_date > DATE_SUB(NOW(), INTERVAL 30 DAY)
-            GROUP BY r.member_id`;
+            GROUP BY r.member_id, r.round_type, r.bow_id`;
         return new P(function(resolve, reject){
             connection.query(query, id, function(err, rows) {
                 if(err) {
@@ -107,7 +115,7 @@ module.exports = {
                     return;
                 }
                 if(rows.length > 0)
-                    resolve(rows[0]);
+                    resolve(rows);
                 else
                     resolve({});
             });    
