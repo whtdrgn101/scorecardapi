@@ -76,14 +76,27 @@ module.exports = {
                     }
                     if(ends) {
                         ends.forEach(e => {
+                            
                             e.round_id = round.id;
-                            connection.query('UPDATE end SET ? WHERE id=?', [e, e.id], function(err, result){
-                              if(err) {
-                                return connection.rollback(function() {
-                                  reject(err);
-                                });    
-                              }
-                           }); 
+                            
+                            if(e.id) {
+                                connection.query('UPDATE end SET ? WHERE id=?', [e, e.id], function(err, result){
+                                    if(err) {
+                                        return connection.rollback(function() {
+                                            reject(err);
+                                        });    
+                                    }
+                                });
+                            } else {
+                                connection.query('INSERT INTO end SET ?', e, function(err, result){
+                                    if(err) {
+                                        return connection.rollback(function() {
+                                            reject(err);
+                                        });    
+                                    }
+                                });
+                            }
+                             
                         });
                     }
                     connection.commit(function(err) {
