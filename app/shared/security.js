@@ -156,7 +156,8 @@ module.exports = {
                     u.email = (userObj.email !== undefined)?userObj.email:user.email;
                     u.name = (userObj.name !== undefined)?userObj.name:user.name;
                     u.active = (userObj.active !== undefined)?userObj.active:user.active;
-                    u.profile_pic = (userObj.profile_pic !== undefined)?userObj.profile_pic:user.profile_pic;
+                    u.location = (userObj.location !== undefined)?userObj.location:user.location;
+                    u.profile_picture = (userObj.profile_picture !== undefined)?userObj.profile_picture:user.profile_picture;
                     
                     if (_.has(userObj, 'newPassword')) {
                         module.exports.user.encrypt(userObj).then(hash => {

@@ -49,7 +49,7 @@ module.exports = function(router) {
             if(user){
                 req.body.id = req.params.userId;
                 security.user.update(req.body).then(results => {
-                    res.status(202).send(user);    
+                    res.status(202).send(results);    
                 });
             } else {
                 res.sendStatus(404);

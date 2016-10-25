@@ -66,7 +66,7 @@ module.exports = {
                     , m.name
                     , m.created_date
                     , m.location
-                    , TO_BASE64(m.profile_pic) profile_pic
+                    , m.profile_picture
                     , SUM(e.arrow_count) arrow_total
                 FROM 
                     member m 
