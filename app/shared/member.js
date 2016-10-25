@@ -55,6 +55,32 @@ module.exports = {
             });    
         });
     },
+    getMemberProfile: function(id) {
+        return new P(function(resolve, reject){
+            connection.query(
+                `SELECT 
+                    m.id
+                    , m.email
+                    , m.active
+                    , m.password
+                    , m.name
+                    , m.created_date
+                    , m.location
+                    , TO_BASE64(m.profile_pic) profile_pic
+                    , SUM(e.arrow_count) arrow_total
+                FROM 
+                    member m 
+                INNER JOIN round r ON (r.member_id = m.id)
+                INNER JOIN end e ON (e.round_id = r.id)
+                WHERE m.id=?`, id, function(err, rows) {
+                if(err) {
+                    reject(err);
+                    return;
+                }
+                resolve(rows);
+            });    
+        });
+    },
     getLifetimeStats: function(id) {
         let query = 
         `SELECT 

@@ -99,5 +99,16 @@ module.exports = function(router) {
                 });
             }
         });
+    router.route('/:userId/profile')
+        .get(function(req, res, next) {
+            if(member.hasAccess(req.token, req.params.userId)){
+                member.getMemberProfile(req.params.userId).then(profile => {
+                    var p = (profile.length > 0)?profile[0]:{};
+                    res.status(200).send(p);
+                }).catch(error => {
+                    res.status(400).send(error);
+                });
+            }
+        });
   
 };
