@@ -18,7 +18,7 @@ var start =  function(cb) {
   app = express();
 
   app.use(morgan('common'));
-  app.use(bodyParser.json({type: '*/*'}));
+  app.use(bodyParser.json({type: '*/*', limit: '15mb'}));
 
   logger.info('[SERVER] Initializing routes');
   require('../../app/routes/index')(app);
