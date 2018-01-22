@@ -3,7 +3,7 @@ var fs = require('fs');
 var jwt = require('jsonwebtoken');
 var User = require('../models/user');
 var P = require('bluebird');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 var _ = require('underscore');
 var member = require('./member');
 

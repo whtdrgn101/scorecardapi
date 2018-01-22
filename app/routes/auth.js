@@ -6,7 +6,7 @@ var logger = require('winston');
 var _ = require('underscore');
 var jwt = require('jsonwebtoken');
 var fs = require('fs');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 var member = require('../shared/member');
 
 module.exports = function(router) {
